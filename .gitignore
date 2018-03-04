@@ -1,0 +1,13 @@
+# IDE ignores
+.idea
+*.iml
+.settings
+.project
+.classpath
+npm-debug.log
+
+# Build ignores
+logs/
+node_modules/
+reports/
+deployment/*.json
