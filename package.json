@@ -1,7 +1,7 @@
 {
-  "name": "getstream-post-service",
+  "name": "getstream-feed-service",
   "version": "1.0.0",
-  "description": "GetStream post service",
+  "description": "GetStream feed service",
   "author": "Brijesh Prasad",
   "repository": {
     "type": "git",
