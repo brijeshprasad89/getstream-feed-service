@@ -22,3 +22,17 @@ const stream = require('getstream');
 
 
  };
+
+
+ exports.getFeed = (req, res) => {
+   console.log(req.params.admin);
+   // Instantiate a new client (server side)
+   client = stream.connect('mhvadvrbedsu', 'r3kvq53jtsfcr6jvp3eszpvpcwpw5w5fy9jrrrxsvyfh2uamkuw7vth8fh2gfsw5', '35055');
+
+   let admin = client.feed('timeline', req.params.admin);
+   admin.get({}).then((result) =>{
+     res.send(result);
+   })
+
+
+ };

@@ -38,4 +38,42 @@ const feedController = require('../controllers/feed.controller');
 router.post('/post', (req, res) => {
     return feedController.postFeed(req, res);
 });
+
+/**
+ * @swagger
+ * /feed/choice/{admin}:
+ *   get:
+ *     summary: Retrieve feed for a given admin
+ *     tags:
+ *       - GetStream feed post service
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: admin
+ *         description: Journal Config document id
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Feed found
+ *         schema:
+ *           $ref: '#/definitions/JournalConfigs'
+ *       400:
+ *         description: Bad Request
+ *         schema:
+ *           $ref: '#/definitions/ValidationErrorMessage'
+ *       404:
+ *         description: Not Found
+ *         schema:
+ *           $ref: '#/definitions/ErrorMessage'
+ *       500:
+ *         description: Internal Server Error
+ *         schema:
+ *           $ref: '#/definitions/ErrorMessage'
+ */
+
+router.get('/choice/:admin?', (req, res) => {
+    return feedController.getFeed(req, res);
+});
 module.exports = router;
