@@ -11,7 +11,7 @@ const stream = require('getstream');
    // Instantiate a new client (server side)
    client = stream.connect('mhvadvrbedsu', 'r3kvq53jtsfcr6jvp3eszpvpcwpw5w5fy9jrrrxsvyfh2uamkuw7vth8fh2gfsw5', '35055');
 
-   let actor = client.feed('timeline', req.body.actor);
+   let actor = client.feed(req.body.feedGroup, req.body.actor);
    const activity = {'actor': req.body.actor, 'verb': req.body.verb, 'object':req.body.object,'message':req.body.message};
    actor.addActivity(activity).then(result =>{
      console.log(result);
@@ -29,10 +29,43 @@ const stream = require('getstream');
    // Instantiate a new client (server side)
    client = stream.connect('mhvadvrbedsu', 'r3kvq53jtsfcr6jvp3eszpvpcwpw5w5fy9jrrrxsvyfh2uamkuw7vth8fh2gfsw5', '35055');
 
-   let admin = client.feed('timeline', req.params.admin);
-   admin.get({}).then((result) =>{
-     res.send(result);
-   })
+   var timeline_1 = client.feed('timeline', req.params.admin);
 
+  /*Get Followed feeds::: */
+   timeline_1.following().then(result =>{
+     let results = result['results'];
+     let promises = [];
+     results.forEach(result =>{
+        let admin = client.feed(result['target_id'].split(':')[0], result['target_id'].split(':')[1]);
+        promises.push(admin.get({}));
+     });
+     Promise.all(promises).then(function(values) {
+          let finalResult = []
+          values.forEach(value =>{
+            value['results'].forEach(feed =>{
+              console.log(feed);
+              let tempFeedObject = {"admin":"","message":"","created_at":""};
+              tempFeedObject['admin'] = feed['actor'];
+              tempFeedObject['message'] = feed['message'];
+              let timePosted = new Date(feed['time']);
+              let timeNow =  new Date();
+              tempFeedObject['created_at'] = timeNow.getHours() - timePosted.getHours();
+              finalResult.push(tempFeedObject);
+            })
+          })
+          return res.status(200).json(finalResult);
+    });
+
+   }).catch(err =>{
+     return res.json(err);
+   });
 
  };
+
+ exports.getTokenForClient = (req,res) => {
+   client = stream.connect('mhvadvrbedsu', 'r3kvq53jtsfcr6jvp3eszpvpcwpw5w5fy9jrrrxsvyfh2uamkuw7vth8fh2gfsw5', '35055');
+
+   var token = client.feed('user', '1').token;
+   return res.status(200).json(token);
+
+ }

@@ -76,4 +76,42 @@ router.post('/post', (req, res) => {
 router.get('/choice/:admin?', (req, res) => {
     return feedController.getFeed(req, res);
 });
+
+/**
+ * @swagger
+ * /feed/token/{user}:
+ *   get:
+ *     summary: Retrieve token for client for given user
+ *     tags:
+ *       - GetStream feed post service
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: user
+ *         description: User
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Token found
+ *         schema:
+ *           $ref: '#/definitions/JournalConfigs'
+ *       400:
+ *         description: Bad Request
+ *         schema:
+ *           $ref: '#/definitions/ValidationErrorMessage'
+ *       404:
+ *         description: Not Found
+ *         schema:
+ *           $ref: '#/definitions/ErrorMessage'
+ *       500:
+ *         description: Internal Server Error
+ *         schema:
+ *           $ref: '#/definitions/ErrorMessage'
+ */
+
+router.get('/token/:user?', (req, res) => {
+    return feedController.getTokenForClient(req, res);
+});
 module.exports = router;
